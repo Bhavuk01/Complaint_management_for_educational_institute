@@ -18,34 +18,24 @@ mongoose.connect(process.env.MONGO_URI, {
   .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
 // ✅ User Schema
-
-
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ["user", "admin", "staff"], default: "user" } // ✅ Added role
+  role: { type: String, enum: ["user", "admin", "staff"], default: "user" },
 });
-
-
 const User = mongoose.model("User", UserSchema);
-module.exports = User;
-
 
 // ✅ Complaint Schema
 const ComplaintSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, 
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   title: { type: String, required: true },
   description: { type: String, required: true },
   status: { type: String, default: "Pending" },
-  assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: "Staff", default: null },
-  createdAt: { type: Date, default: Date.now }
+  assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+  createdAt: { type: Date, default: Date.now },
 });
-
 const Complaint = mongoose.model("Complaint", ComplaintSchema);
-module.exports = Complaint;
-
-
 
 // ✅ Middleware to Verify JWT Token
 const authMiddleware = (req, res, next) => {
@@ -53,10 +43,7 @@ const authMiddleware = (req, res, next) => {
   if (!token) return res.status(401).json({ message: "Unauthorized: No token provided" });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      console.error("❌ JWT Verification Error:", err);
-      return res.status(403).json({ message: "Forbidden: Invalid token" });
-    }
+    if (err) return res.status(403).json({ message: "Forbidden: Invalid token" });
     req.user = decoded;
     next();
   });
@@ -204,18 +191,22 @@ app.post("/admin/assign", authMiddleware, async (req, res) => {
   }
 });
 
+// ✅ Get All Staff Members (Accessible only to admin)
 app.get("/staff", authMiddleware, async (req, res) => {
   try {
+    // Ensure only admins can access this
     if (req.user.role !== "admin") {
-      return res.status(403).json({ message: "Forbidden: Admin access required" });
+      return res.status(403).json({ message: "Access denied: Admins only" });
     }
+
     const staffMembers = await User.find({ role: "staff" }).select("-password");
     res.json(staffMembers);
   } catch (error) {
-    console.error("❌ Error fetching staff members:", error);
+    console.error("❌ Error fetching staff:", error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
+
 
 
 app.get("/staff/complaints", authMiddleware, async (req, res) => {
