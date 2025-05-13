@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios"; 
+import axios from "axios";
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
@@ -7,6 +7,7 @@ const AdminDashboard = () => {
   const [staff, setStaff] = useState([]);
   const [selectedStaff, setSelectedStaff] = useState({});
   const [loading, setLoading] = useState(true);
+  const [complaintIdsMap, setComplaintIdsMap] = useState({});
 
   useEffect(() => {
     fetchComplaints();
@@ -19,7 +20,17 @@ const AdminDashboard = () => {
       const res = await axios.get("http://localhost:5000/admin/complaints", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setComplaints(res.data);
+
+      const complaintsData = res.data;
+
+      // Generate and store a random ID for each complaint if not present
+      const idMap = {};
+      complaintsData.forEach((c) => {
+        idMap[c._id] = generateRandomAlphaNumeric();
+      });
+
+      setComplaintIdsMap(idMap);
+      setComplaints(complaintsData);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching complaints:", error);
@@ -56,8 +67,21 @@ const AdminDashboard = () => {
     }
   };
 
-  const formatComplaintId = (index) => {
-    return `CMP${String(index + 1).padStart(3, "0")}`;
+  // Generate unique alphanumeric complaint ID like CMP-X3A421
+  const generateRandomAlphaNumeric = () => {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const numbers = '0123456789';
+    const getRandom = (chars, length) =>
+      Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+
+    const randomLetters = getRandom(letters, 3);
+    const randomNumbers = getRandom(numbers, 3);
+
+    return `CMP-${randomLetters}${randomNumbers}`;
+  };
+
+  const formatComplaintId = (complaint) => {
+    return complaintIdsMap[complaint._id] || "CMP-XXXXXX";
   };
 
   if (loading) return <div>Loading...</div>;
@@ -78,9 +102,9 @@ const AdminDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {complaints.map((complaint, index) => (
+            {complaints.map((complaint) => (
               <tr key={complaint._id} className="border">
-                <td className="border p-2">{formatComplaintId(index)}</td>
+                <td className="border p-2">{formatComplaintId(complaint)}</td>
                 <td className="border p-2">{complaint.title}</td>
                 <td className="border p-2">
                   {complaint.user ? complaint.user.name : "Unknown"}

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-
 const StaffDashboard = () => {
   const [staffName, setStaffName] = useState("");
   const [complaints, setComplaints] = useState([]);
@@ -50,10 +49,11 @@ const StaffDashboard = () => {
         <ul>
           {complaints.map((comp) => (
             <li key={comp._id} className="complaint-card">
-              <h4>{comp.title}</h4>
-              <p>{comp.description}</p>
-              <p>Status: <strong>{comp.status}</strong></p>
-              <p>Submitted by: {comp.user.name} ({comp.user.email})</p>
+              <h4><strong>Title:</strong> {comp.title}</h4>
+              <p><strong>Complaint ID:</strong> {comp._id}</p>
+              <p><strong>Description:</strong> {comp.description}</p>
+              <p><strong>Status:</strong> {comp.status}</p>
+              <p><strong>Submitted by:</strong> {comp.user.name} ({comp.user.email})</p>
             </li>
           ))}
         </ul>

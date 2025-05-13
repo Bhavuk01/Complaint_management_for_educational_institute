@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./UserDashboard.css";
 
-const BACKEND_URL = "http://localhost:5000"; // Change to hosted backend URL if deployed
+const BACKEND_URL = "http://localhost:5000"; // Change if deployed
 
 function UserDashboard() {
   const navigate = useNavigate();
@@ -22,16 +22,16 @@ function UserDashboard() {
 
     setRole(userRole);
 
-    // Fetch user details
+    // Fetch user info
     axios
       .get(`${BACKEND_URL}/user`, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => setUser(response.data))
       .catch(() => navigate("/userDashboard"));
 
-    // Fetch complaints based on role
-    const complaintsEndpoint = userRole === "admin" ? "/all-complaints" : "/complaints";
+    // Fetch complaints
+    const endpoint = userRole === "admin" ? "/all-complaints" : "/complaints";
     axios
-      .get(`${BACKEND_URL}${complaintsEndpoint}`, { headers: { Authorization: `Bearer ${token}` } })
+      .get(`${BACKEND_URL}${endpoint}`, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => setComplaints(response.data))
       .catch((error) => console.error("Error fetching complaints:", error));
   }, [navigate]);
@@ -61,13 +61,14 @@ function UserDashboard() {
           <div className="complaints-list">
             {complaints.map((complaint) => (
               <div key={complaint._id} className="complaint-card">
-                <h3><strong>Title:{complaint.title}</strong></h3>
-                <p><strong>Complaint {complaint.userName}:</strong> {complaint.description}</p>
+                <h3><strong>Title:</strong> {complaint.title}</h3>
+                <p><strong>Complaint ID:</strong> {complaint._id}</p>
+                <p><strong>Description:</strong> {complaint.description}</p>
                 <span className={`status ${complaint.status.toLowerCase()}`}>
                   {complaint.status}
                 </span>
                 {role === "admin" && (
-                  <p className="submitted-by">Submitted by: {complaint.userName}</p>
+                  <p className="submitted-by"><strong>Submitted by:</strong> {complaint.userName}</p>
                 )}
               </div>
             ))}

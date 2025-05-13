@@ -68,7 +68,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// ✅ Login API (Fixed JWT Secret Issue)
+// ✅ Login API
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -79,7 +79,6 @@ app.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-    // 🔥 FIXED: Use process.env.JWT_SECRET
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
     res.status(200).json({ message: "Login successful", token, role: user.role });
@@ -89,13 +88,10 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// ✅ Submit a Complaint (POST)
+// ✅ Submit a Complaint (User only)
 app.post("/complaints", authMiddleware, async (req, res) => {
   try {
     const { title, description } = req.body;
-    if (!title || !description) {
-      return res.status(400).json({ message: "Title and description are required" });
-    }
 
     if (!req.user || !req.user.id) {
       return res.status(401).json({ message: "Unauthorized: Invalid user" });
@@ -112,29 +108,25 @@ app.post("/complaints", authMiddleware, async (req, res) => {
     res.status(201).json({ 
       message: "Complaint submitted successfully", 
       complaint: newComplaint,
-      redirect: "/userdashboard" // Send redirect path
+      redirect: "/userdashboard"
     });
   } catch (error) {
-    console.error("❌ Error submitting complaint:", error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
 
-
-// ✅ Get Complaints of Logged-in User (GET)
+// ✅ Get Logged-in User's Complaints
 app.get("/complaints", authMiddleware, async (req, res) => {
   try {
     const complaints = await Complaint.find({ user: req.user.id })
-      .populate("user", "name email") // Fetch user name & email
+      .populate("user", "name email")
       .sort({ createdAt: -1 });
 
     res.json(complaints);
   } catch (error) {
-    console.error("❌ Error fetching complaints:", error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
-
 
 // ✅ Get Logged-in User Details
 app.get("/user", authMiddleware, async (req, res) => {
@@ -144,31 +136,26 @@ app.get("/user", authMiddleware, async (req, res) => {
 
     res.json(user);
   } catch (error) {
-    console.error("❌ Error fetching user details:", error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
 
-
+// ✅ Admin: Get All Complaints
 app.get("/admin/complaints", authMiddleware, async (req, res) => {
   try {
+    if (req.user.role !== "admin") return res.status(403).json({ message: "Access denied" });
+
     const complaints = await Complaint.find()
-      .populate("user", "name email") // Ensure this fetches user details
+      .populate("user", "name email")
       .sort({ createdAt: -1 });
 
     res.json(complaints);
   } catch (error) {
-    console.error("❌ Error fetching complaints:", error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
 
-
-
-
-
-
-
+// ✅ Admin: Assign Complaint to Staff
 app.post("/admin/assign", authMiddleware, async (req, res) => {
   const { complaintId, staffId } = req.body;
 
@@ -191,10 +178,9 @@ app.post("/admin/assign", authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ Get All Staff Members (Accessible only to admin)
+// ✅ Admin: Get All Staff Members
 app.get("/staff", authMiddleware, async (req, res) => {
   try {
-    // Ensure only admins can access this
     if (req.user.role !== "admin") {
       return res.status(403).json({ message: "Access denied: Admins only" });
     }
@@ -202,13 +188,11 @@ app.get("/staff", authMiddleware, async (req, res) => {
     const staffMembers = await User.find({ role: "staff" }).select("-password");
     res.json(staffMembers);
   } catch (error) {
-    console.error("❌ Error fetching staff:", error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
 
-
-
+// ✅ Staff: Get Assigned Complaints
 app.get("/staff/complaints", authMiddleware, async (req, res) => {
   try {
     if (req.user.role !== "staff") return res.status(403).json({ message: "Access denied" });
@@ -220,8 +204,7 @@ app.get("/staff/complaints", authMiddleware, async (req, res) => {
   }
 });
 
-
-
+// ✅ Staff: Mark Complaint as Resolved
 app.post("/staff/resolve", authMiddleware, async (req, res) => {
   const { complaintId } = req.body;
 
@@ -240,11 +223,6 @@ app.post("/staff/resolve", authMiddleware, async (req, res) => {
   }
 });
 
-
-
-
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-
-
