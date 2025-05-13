@@ -1,0 +1,179 @@
+/* Cool User Dashboard Styling */
+
+.dashboard-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.dashboard-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.dashboard-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #cbd5e1;
+}
+
+/* Buttons */
+.add-complaint-btn, 
+.logout-btn {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  text-decoration: none;
+  margin: 10px;
+}
+
+.add-complaint-btn {
+  background: linear-gradient(135deg, #4f46e5, #6d28d9);
+  color: white;
+}
+
+.logout-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.add-complaint-btn:hover, 
+.logout-btn:hover {
+  transform: scale(1.05);
+  filter: brightness(1.2);
+}
+
+/* Complaints Section */
+.complaints-section {
+  margin-top: 30px;
+  width: 80%;
+  max-width: 900px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Complaints List */
+.complaints-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* Responsive grid */
+  gap: 20px;
+  justify-items: center;
+  width: 100%;
+}
+
+.complaint-card {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.complaint-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Complaint Status Styles */
+.status {
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.status.pending { background: #facc15; color: #1e293b; }
+.status.resolved { background: #10b981; color: white; }
+.status.rejected { background: #ef4444; color: white; }
+
+.submitted-by {
+  font-size: 0.85rem;
+  margin-top: 8px;
+  color: #e5e7eb;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard-title {
+    font-size: 2rem;
+  }
+
+  .dashboard-subtitle {
+    font-size: 1rem;
+  }
+
+  .complaints-section {
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-title {
+    font-size: 1.8rem;
+  }
+
+  .dashboard-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .complaint-card {
+    max-width: 260px;
+    padding: 15px;
+  }
+
+  .add-complaint-btn, 
+  .logout-btn {
+    font-size: 0.9rem;
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-title {
+    font-size: 1.6rem;
+  }
+
+  .dashboard-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .complaints-section {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .complaints-list {
+    grid-template-columns: 1fr;
+  }
+
+  .complaint-card {
+    width: 90%;
+    max-width: none;
+  }
+
+  .add-complaint-btn, 
+  .logout-btn {
+    width: 100%;
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+}
