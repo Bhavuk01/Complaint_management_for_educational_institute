@@ -90,38 +90,41 @@ const AdminDashboard = () => {
                   {complaint.assignedTo ? complaint.assignedTo.name : "Not Assigned"}
                 </td>
                 <td className="admindashboard8">
-                  {complaint.assignedTo ? (
-                    <span className="admindashboard9">In Working</span>
-                  ) : (
-                    <div className="admindashboard10">
-                      <select
-                        className="admindashboard11"
-                        value={selectedStaff[complaint._id] || ""}
-                        onChange={(e) =>
-                          setSelectedStaff({
-                            ...selectedStaff,
-                            [complaint._id]: e.target.value,
-                          })
-                        }
-                      >
-                        <option value="">Select Staff</option>
-                        {staff.map((member) => (
-                          <option key={member._id} value={member._id}>
-                            {member.name}
-                          </option>
-                        ))}
-                      </select>
-                      <button
-                        onClick={() =>
-                          assignComplaint(complaint._id, selectedStaff[complaint._id])
-                        }
-                        className="admindashboard12"
-                      >
-                        Assign
-                      </button>
-                    </div>
-                  )}
-                </td>
+  {complaint.status === "Resolved" ? (
+    <span className="admindashboard9">Done</span>
+  ) : complaint.assignedTo ? (
+    <span className="admindashboard9">In Working</span>
+  ) : (
+    <div className="admindashboard10">
+      <select
+        className="admindashboard11"
+        value={selectedStaff[complaint._id] || ""}
+        onChange={(e) =>
+          setSelectedStaff({
+            ...selectedStaff,
+            [complaint._id]: e.target.value,
+          })
+        }
+      >
+        <option value="">Select Staff</option>
+        {staff.map((member) => (
+          <option key={member._id} value={member._id}>
+            {member.name}
+          </option>
+        ))}
+      </select>
+      <button
+        onClick={() =>
+          assignComplaint(complaint._id, selectedStaff[complaint._id])
+        }
+        className="admindashboard12"
+      >
+        Assign
+      </button>
+    </div>
+  )}
+</td>
+
               </tr>
             ))}
           </tbody>
