@@ -43,8 +43,22 @@ function UserDashboard() {
   };
 
   const formatComplaintId = (complaint) => {
-  return `CMP-${complaint._id.slice(0, 3).toUpperCase()}-${complaint._id.slice(3, 6)}`;
-};
+    return `CMP-${complaint._id.slice(0, 3).toUpperCase()}-${complaint._id.slice(3, 6)}`;
+  };
+
+  const deleteComplaint = (complaintId) => {
+    const token = localStorage.getItem("token");
+
+    axios
+      .delete(`${BACKEND_URL}/complaints/${complaintId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(() => {
+        setComplaints(complaints.filter((complaint) => complaint._id !== complaintId));
+        alert("Complaint deleted successfully.");
+      })
+      .catch((error) => console.error("Error deleting complaint:", error));
+  };
 
   return (
     <div className="dashboard-container">
@@ -73,6 +87,14 @@ function UserDashboard() {
                 </span>
                 {role === "admin" && (
                   <p className="submitted-by"><strong>Submitted by:</strong> {complaint.userName}</p>
+                )}
+                {role !== "admin" && (
+                  <button
+                    className="delete-complaint-btn"
+                    onClick={() => deleteComplaint(complaint._id)}
+                  >
+                    Delete Complaint
+                  </button>
                 )}
               </div>
             ))}

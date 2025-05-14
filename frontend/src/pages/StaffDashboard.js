@@ -52,7 +52,6 @@ const StaffDashboard = () => {
           },
         }
       );
-      // Update the local state to reflect the changes without refetching all data
       setComplaints((prevComplaints) =>
         prevComplaints.map((complaint) =>
           complaint._id === complaintId ? { ...complaint, status: "Resolved" } : complaint
@@ -60,6 +59,27 @@ const StaffDashboard = () => {
       );
     } catch (err) {
       console.error("Error updating status:", err.response?.data?.message || err.message);
+    }
+  };
+
+  const resolveComplaint = async (complaintId) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/staff/resolve",
+        { complaintId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setComplaints((prevComplaints) =>
+        prevComplaints.map((complaint) =>
+          complaint._id === complaintId ? { ...complaint, status: "Resolved" } : complaint
+        )
+      );
+
+      alert("Complaint marked as resolved!");
+    } catch (err) {
+      console.error("Error resolving complaint:", err);
+      alert("An error occurred while resolving the complaint.");
     }
   };
 
@@ -74,24 +94,28 @@ const StaffDashboard = () => {
         <p>No complaints assigned to you yet.</p>
       ) : (
         <ul>
-          {complaints.map((comp) => (
-            <li key={comp._id} className="complaint-card">
-              <h4><strong>Title:</strong> {comp.title}</h4>
-              <p><strong>Complaint ID:</strong> {formatComplaintId(comp)}</p>
-              <p><strong>Description:</strong> {comp.description}</p>
-              <p><strong>Status:</strong> {comp.status}</p>
-              <p>
-                <strong>Submitted by:</strong>{" "}
-                {comp.user ? `${comp.user.name} (${comp.user.email})` : "Unknown"}
-              </p>
+          {complaints.map((complaint) => (
+            <div key={complaint._id} className="complaint-card">
+              <h3><strong>Title:</strong> {complaint.title}</h3>
+              <p><strong>Complaint ID:</strong> {formatComplaintId(complaint)}</p>
+              <p><strong>Description:</strong> {complaint.description}</p>
+              <span className={`status ${complaint.status.toLowerCase()}`}>{complaint.status}</span>
 
-              {/* Button to mark the complaint as resolved */}
-              {comp.status !== "Resolved" && (
-                <button onClick={() => updateComplaintStatus(comp._id)}>
-                  Mark as Resolved
-                </button>
-              )}
-            </li>
+              {/* Display the name and email of the user who submitted the complaint */}
+              <p><strong>Submitted by:</strong> {complaint.user ? `${complaint.user.name} (${complaint.user.email})` : "Unknown"}</p>
+              
+              {/* Display 'Resolved' after the 'Submitted by' when the status is resolved */}
+              {complaint.status === "Resolved" && <p><strong>Status:</strong> Resolved</p>}
+              
+              {/* Move the button to the end */}
+              <div className="resolve-btn-container">
+                {complaint.status !== "Resolved" && (
+                  <button onClick={() => resolveComplaint(complaint._id)} className="resolve-btn">
+                    Mark as Resolved
+                  </button>
+                )}
+              </div>
+            </div>
           ))}
         </ul>
       )}

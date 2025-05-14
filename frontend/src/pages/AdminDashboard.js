@@ -96,39 +96,39 @@ const AdminDashboard = () => {
                     : "Not Assigned"}
                 </td>
                 <td className="border p-2">
-                  {complaint.status === "Pending" && (
-                    <div className="flex gap-2">
-                      <select
-                        className="border p-1"
-                        value={selectedStaff[complaint._id] || ""}
-                        onChange={(e) =>
-                          setSelectedStaff({
-                            ...selectedStaff,
-                            [complaint._id]: e.target.value,
-                          })
-                        }
-                      >
-                        <option value="">Select Staff</option>
-                        {staff.map((member) => (
-                          <option key={member._id} value={member._id}>
-                            {member.name}
-                          </option>
-                        ))}
-                      </select>
-                      <button
-                        onClick={() =>
-                          assignComplaint(
-                            complaint._id,
-                            selectedStaff[complaint._id]
-                          )
-                        }
-                        className="bg-blue-500 text-white px-3 py-1 rounded"
-                      >
-                        Assign
-                      </button>
-                    </div>
-                  )}
-                </td>
+  {complaint.assignedTo ? (
+    <span className="text-green-600 font-semibold">In Working</span>
+  ) : (
+    <div className="flex gap-2">
+      <select
+        className="border p-1"
+        value={selectedStaff[complaint._id] || ""}
+        onChange={(e) =>
+          setSelectedStaff({
+            ...selectedStaff,
+            [complaint._id]: e.target.value,
+          })
+        }
+      >
+        <option value="">Select Staff</option>
+        {staff.map((member) => (
+          <option key={member._id} value={member._id}>
+            {member.name}
+          </option>
+        ))}
+      </select>
+      <button
+        onClick={() =>
+          assignComplaint(complaint._id, selectedStaff[complaint._id])
+        }
+        className="bg-blue-500 text-white px-3 py-1 rounded"
+      >
+        Assign
+      </button>
+    </div>
+  )}
+</td>
+
               </tr>
             ))}
           </tbody>

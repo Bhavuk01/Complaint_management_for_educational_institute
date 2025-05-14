@@ -147,6 +147,7 @@ app.get("/admin/complaints", authMiddleware, async (req, res) => {
 
     const complaints = await Complaint.find()
       .populate("user", "name email")
+      .populate("assignedTo", "name")
       .sort({ createdAt: -1 });
 
     res.json(complaints);
@@ -225,6 +226,7 @@ app.get("/staff/complaints", authMiddleware, async (req, res) => {
 });
 
 // ✅ Staff: Mark Complaint as Resolved
+// ✅ Staff: Mark Complaint as Resolved and notify both user and admin
 app.post("/staff/resolve", authMiddleware, async (req, res) => {
   const { complaintId } = req.body;
 
@@ -237,11 +239,38 @@ app.post("/staff/resolve", authMiddleware, async (req, res) => {
     complaint.status = "Resolved";
     await complaint.save();
 
+    // Notify user (optional: add email or notification system)
+    // Notify the admin (optional: add email or notification system)
+
     res.json({ message: "Complaint resolved successfully", complaint });
   } catch (error) {
     res.status(500).json({ message: "Error resolving complaint", error: error.message });
   }
 });
+
+
+// ✅ Delete Complaint (User only)
+app.delete("/complaints/:complaintId", authMiddleware, async (req, res) => {
+  try {
+    const complaintId = req.params.complaintId;
+
+    // Check if the complaint exists and belongs to the logged-in user
+    const complaint = await Complaint.findOne({ _id: complaintId, user: req.user.id });
+
+    if (!complaint) {
+      return res.status(404).json({ message: "Complaint not found or does not belong to you" });
+    }
+
+    // Delete the complaint
+    await Complaint.findByIdAndDelete(complaintId);
+
+    res.json({ message: "Complaint deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+});
+
+
 
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;
