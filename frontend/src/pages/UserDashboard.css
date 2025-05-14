@@ -177,3 +177,16 @@
     padding: 8px;
   }
 }
+
+.delete-complaint-btn {
+  background-color: red;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.delete-complaint-btn:hover {
+  background-color: darkred;
+}
