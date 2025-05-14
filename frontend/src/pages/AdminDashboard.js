@@ -19,10 +19,7 @@ const AdminDashboard = () => {
       const res = await axios.get("http://localhost:5000/admin/complaints", {
         headers: { Authorization: `Bearer ${token}` },
       });
-
-      const complaintsData = res.data;
-
-      setComplaints(complaintsData);
+      setComplaints(res.data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching complaints:", error);
@@ -53,82 +50,78 @@ const AdminDashboard = () => {
         { complaintId, staffId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      fetchComplaints(); // refresh after assignment
+      fetchComplaints(); // refresh data
     } catch (error) {
       console.error("Error assigning complaint:", error);
     }
   };
 
-  // Format the complaint ID (ensure it’s fixed once assigned)
   const formatComplaintId = (complaint) => {
     return `CMP-${complaint._id.slice(0, 3).toUpperCase()}-${complaint._id.slice(3, 6)}`;
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="admindashboard1">Loading...</div>;
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <table className="w-full border-collapse border border-gray-300">
+    <div className="admindashboard1">
+      <h1 className="admindashboard2">Admin Dashboard</h1>
+      <div className="admindashboard3">
+        <table className="admindashboard4">
           <thead>
-            <tr className="bg-gray-200">
-              <th className="border p-2">Complaint ID</th>
-              <th className="border p-2">Title</th>
-              <th className="border p-2">Complaint By</th>
-              <th className="border p-2">Status</th>
-              <th className="border p-2">Assigned To</th>
-              <th className="border p-2">Actions</th>
+            <tr className="admindashboard5">
+              <th className="admindashboard6">Complaint ID</th>
+              <th className="admindashboard6">Title</th>
+              <th className="admindashboard6">Complaint By</th>
+              <th className="admindashboard6">Status</th>
+              <th className="admindashboard6">Assigned To</th>
+              <th className="admindashboard6">Actions</th>
             </tr>
           </thead>
           <tbody>
             {complaints.map((complaint) => (
-              <tr key={complaint._id} className="border">
-                <td className="border p-2">{formatComplaintId(complaint)}</td>
-                <td className="border p-2">{complaint.title}</td>
-                <td className="border p-2">
+              <tr key={complaint._id} className="admindashboard7">
+                <td className="admindashboard8">{formatComplaintId(complaint)}</td>
+                <td className="admindashboard8">{complaint.title}</td>
+                <td className="admindashboard8">
                   {complaint.user ? complaint.user.name : "Unknown"}
                 </td>
-                <td className="border p-2">{complaint.status}</td>
-                <td className="border p-2">
-                  {complaint.assignedTo
-                    ? complaint.assignedTo.name
-                    : "Not Assigned"}
+                <td className="admindashboard8">{complaint.status}</td>
+                <td className="admindashboard8">
+                  {complaint.assignedTo ? complaint.assignedTo.name : "Not Assigned"}
                 </td>
-                <td className="border p-2">
-  {complaint.assignedTo ? (
-    <span className="text-green-600 font-semibold">In Working</span>
-  ) : (
-    <div className="flex gap-2">
-      <select
-        className="border p-1"
-        value={selectedStaff[complaint._id] || ""}
-        onChange={(e) =>
-          setSelectedStaff({
-            ...selectedStaff,
-            [complaint._id]: e.target.value,
-          })
-        }
-      >
-        <option value="">Select Staff</option>
-        {staff.map((member) => (
-          <option key={member._id} value={member._id}>
-            {member.name}
-          </option>
-        ))}
-      </select>
-      <button
-        onClick={() =>
-          assignComplaint(complaint._id, selectedStaff[complaint._id])
-        }
-        className="bg-blue-500 text-white px-3 py-1 rounded"
-      >
-        Assign
-      </button>
-    </div>
-  )}
-</td>
-
+                <td className="admindashboard8">
+                  {complaint.assignedTo ? (
+                    <span className="admindashboard9">In Working</span>
+                  ) : (
+                    <div className="admindashboard10">
+                      <select
+                        className="admindashboard11"
+                        value={selectedStaff[complaint._id] || ""}
+                        onChange={(e) =>
+                          setSelectedStaff({
+                            ...selectedStaff,
+                            [complaint._id]: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="">Select Staff</option>
+                        {staff.map((member) => (
+                          <option key={member._id} value={member._id}>
+                            {member.name}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        onClick={() =>
+                          assignComplaint(complaint._id, selectedStaff[complaint._id])
+                        }
+                        className="admindashboard12"
+                      >
+                        Assign
+                      </button>
+                    </div>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

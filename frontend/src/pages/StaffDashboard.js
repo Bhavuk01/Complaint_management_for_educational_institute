@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "./StaffDashboard.css";
 
 const StaffDashboard = () => {
   const [staffName, setStaffName] = useState("");
@@ -11,7 +12,6 @@ const StaffDashboard = () => {
   useEffect(() => {
     const fetchStaffData = async () => {
       try {
-        // Fetch logged-in staff details
         const userRes = await axios.get("http://localhost:5000/user", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -19,13 +19,14 @@ const StaffDashboard = () => {
         });
         setStaffName(userRes.data.name);
 
-        // Fetch complaints assigned to the staff
         const complaintRes = await axios.get("http://localhost:5000/staff/complaints", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        const sortedComplaints = complaintRes.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const sortedComplaints = complaintRes.data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
         setComplaints(sortedComplaints);
       } catch (err) {
         console.error("Error:", err.response?.data?.message || err.message);
@@ -41,38 +42,17 @@ const StaffDashboard = () => {
     return `CMP-${complaint._id.slice(0, 3).toUpperCase()}-${complaint._id.slice(3, 6)}`;
   };
 
-  const updateComplaintStatus = async (complaintId) => {
-    try {
-      await axios.put(
-        `http://localhost:5000/staff/complaints/${complaintId}`,
-        { status: "Resolved" },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setComplaints((prevComplaints) =>
-        prevComplaints.map((complaint) =>
-          complaint._id === complaintId ? { ...complaint, status: "Resolved" } : complaint
-        )
-      );
-    } catch (err) {
-      console.error("Error updating status:", err.response?.data?.message || err.message);
-    }
-  };
-
   const resolveComplaint = async (complaintId) => {
     try {
-      const response = await axios.post(
+      await axios.post(
         "http://localhost:5000/staff/resolve",
         { complaintId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      setComplaints((prevComplaints) =>
-        prevComplaints.map((complaint) =>
-          complaint._id === complaintId ? { ...complaint, status: "Resolved" } : complaint
+      setComplaints((prev) =>
+        prev.map((c) =>
+          c._id === complaintId ? { ...c, status: "Resolved" } : c
         )
       );
 
@@ -84,40 +64,48 @@ const StaffDashboard = () => {
   };
 
   return (
-    <div className="staff-dashboard">
-      <h2>Welcome, {staffName} 👋</h2>
-      <h3>Your Assigned Complaints</h3>
+    <div className="staffdashboard1">
+      <h2 className="staffdashboard2">Welcome, {staffName} 👋</h2>
+      <h3 className="staffdashboard3">Your Assigned Complaints</h3>
 
       {loading ? (
-        <p>Loading...</p>
+        <p className="staffdashboard4">Loading...</p>
       ) : complaints.length === 0 ? (
-        <p>No complaints assigned to you yet.</p>
+        <p className="staffdashboard4">No complaints assigned to you yet.</p>
       ) : (
-        <ul>
+        <div className="staffdashboard5">
           {complaints.map((complaint) => (
-            <div key={complaint._id} className="complaint-card">
-              <h3><strong>Title:</strong> {complaint.title}</h3>
+            <div key={complaint._id} className="staffdashboard6">
+              <h3 className="staffdashboard7">{complaint.title}</h3>
               <p><strong>Complaint ID:</strong> {formatComplaintId(complaint)}</p>
               <p><strong>Description:</strong> {complaint.description}</p>
-              <span className={`status ${complaint.status.toLowerCase()}`}>{complaint.status}</span>
+              <span className={`staffdashboard8 ${complaint.status.toLowerCase()}`}>
+                {complaint.status}
+              </span>
+              <p>
+                <strong>Submitted by:</strong>{" "}
+                {complaint.user
+                  ? `${complaint.user.name} (${complaint.user.email})`
+                  : "Unknown"}
+              </p>
 
-              {/* Display the name and email of the user who submitted the complaint */}
-              <p><strong>Submitted by:</strong> {complaint.user ? `${complaint.user.name} (${complaint.user.email})` : "Unknown"}</p>
-              
-              {/* Display 'Resolved' after the 'Submitted by' when the status is resolved */}
-              {complaint.status === "Resolved" && <p><strong>Status:</strong> Resolved</p>}
-              
-              {/* Move the button to the end */}
-              <div className="resolve-btn-container">
-                {complaint.status !== "Resolved" && (
-                  <button onClick={() => resolveComplaint(complaint._id)} className="resolve-btn">
+              {complaint.status === "Resolved" && (
+                <p><strong>Status:</strong> Resolved</p>
+              )}
+
+              {complaint.status !== "Resolved" && (
+                <div className="staffdashboard9">
+                  <button
+                    onClick={() => resolveComplaint(complaint._id)}
+                    className="staffdashboard10"
+                  >
                     Mark as Resolved
                   </button>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

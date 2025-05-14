@@ -39,26 +39,26 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h2 className="login-title">Login</h2>
+    <div className="oldlogin1">
+      <div className="oldlogin2">
+        <h2 className="oldlogin-title">Login</h2>
         {message && <p className="message">{message}</p>}
         <form onSubmit={handleSubmit}>
-          <div className="input-group">
+          <div className="oldinput-group">
             <label>Email</label>
             <input type="email" name="email" value={formData.email} onChange={handleChange} required />
           </div>
-          <div className="input-group">
+          <div className="logininput-group">
             <label>Password</label>
             <input type="password" name="password" value={formData.password} onChange={handleChange} required />
           </div>
-          <button type="submit" className="login-btn" disabled={loading}>
+          <button type="submit" className="oldlogin-btn" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-        <div className="button-group">
-          <button className="back-btn" onClick={() => navigate("/")}>Home</button>
-          <button className="signup-btn" onClick={() => navigate("/Register")}>Sign Up</button>
+        <div className="oldbutton-group">
+          <button className="oldback-btn" onClick={() => navigate("/")}>Home</button>
+          <button className="oldsignup-btn" onClick={() => navigate("/Register")}>Sign Up</button>
         </div>
       </div>
     </div>

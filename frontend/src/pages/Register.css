@@ -1,6 +1,6 @@
 /* Enhanced Register Page Styling */
 
-.register-container {
+.newregister-container {
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -11,7 +11,7 @@
   padding: 20px;
 }
 
-.register-card {
+.newregister-card {
   background-color: white;
   color: #374151;
   padding: 40px;
@@ -24,29 +24,29 @@
   backdrop-filter: blur(10px);
 }
 
-.register-card:hover {
+.newregister-card:hover {
   transform: translateY(-5px);
 }
 
-.register-title {
+.newregister-title {
   font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 10px;
   color: black;
 }
 
-.register-subtitle {
+.newregister-subtitle {
   font-size: 1rem;
   margin-bottom: 20px;
   color: black;
 }
 
-.input-group {
+.newinput-group {
   text-align: left;
   margin-bottom: 20px;
 }
 
-.input-group label {
+.newinput-group label {
   display: block;
   font-size: 1rem;
   font-weight: 600;
@@ -54,7 +54,7 @@
   color: black;
 }
 
-.input-group input, .input-group select {
+.newinput-group input, .newinput-group select {
   width: 100%;
   padding: 12px;
   border: 1px solid #D1D5DB;
@@ -64,20 +64,20 @@
   background-color: #F9FAFB;
 }
 
-.input-group input:focus, .input-group select:focus {
+.newinput-group input:focus, .input-group select:focus {
   border-color: #4F46E5;
   outline: none;
   box-shadow: 0px 4px 6px rgba(79, 70, 229, 0.3);
   background-color: #fff;
 }
 
-.input-group select option {
+.newinput-group select option {
   font-size: 1rem;
   background-color: #fff;
   color: #374151;
 }
 
-.register-btn {
+.newregister-btn {
   width: 100%;
   padding: 14px;
   font-size: 1.1rem;
@@ -91,25 +91,25 @@
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-.register-btn:hover {
+.newregister-btn:hover {
   background: linear-gradient(135deg, #4338CA, #5B21B6);
   transform: scale(1.02);
 }
 
-.login-text {
+.newlogin-text {
   margin-top: 15px;
   font-size: 0.9rem;
   color: #6B7280;
 }
 
-.login-link {
+.newlogin-link {
   color: #9333EA;
   font-weight: bold;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
-.login-link:hover {
+.newlogin-link:hover {
   text-decoration: underline;
   color: #7C3AED;
 }

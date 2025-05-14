@@ -61,24 +61,24 @@ function UserDashboard() {
   };
 
   return (
-    <div className="dashboard-container">
-      <h1 className="dashboard-title">Welcome, {user?.name || "User"}!</h1>
-      <p className="dashboard-subtitle">Manage your complaints efficiently.</p>
+    <div className="userdashboard-container">
+      <h1 className="userdashboard-title">Welcome, {user?.name || "User"}!</h1>
+      <p className="userdashboard-subtitle">Manage your complaints efficiently.</p>
 
       {role !== "admin" && (
-        <button className="add-complaint-btn" onClick={() => navigate("/addcomplaint")}>
+        <button className="useradd-complaint-btn" onClick={() => navigate("/addcomplaint")}>
           Add Complaint
         </button>
       )}
 
-      <div className="complaints-section">
+      <div className="usercomplaints-section">
         <h2>{role === "admin" ? "All Complaints" : "Your Complaints"}</h2>
         {complaints.length === 0 ? (
           <p>No complaints available.</p>
         ) : (
-          <div className="complaints-list">
+          <div className="usercomplaints-list">
             {complaints.map((complaint) => (
-              <div key={complaint._id} className="complaint-card">
+              <div key={complaint._id} className="usercomplaint-card">
                 <h3><strong>Title:</strong> {complaint.title}</h3>
                 <p><strong>Complaint ID:</strong> {formatComplaintId(complaint)}</p>
                 <p><strong>Description:</strong> {complaint.description}</p>
@@ -86,11 +86,11 @@ function UserDashboard() {
                   {complaint.status}
                 </span>
                 {role === "admin" && (
-                  <p className="submitted-by"><strong>Submitted by:</strong> {complaint.userName}</p>
+                  <p className="usersubmitted-by"><strong>Submitted by:</strong> {complaint.userName}</p>
                 )}
                 {role !== "admin" && (
                   <button
-                    className="delete-complaint-btn"
+                    className="userdelete-complaint-btn"
                     onClick={() => deleteComplaint(complaint._id)}
                   >
                     Delete Complaint
@@ -102,7 +102,7 @@ function UserDashboard() {
         )}
       </div>
 
-      <button className="logout-btn" onClick={handleLogout}>
+      <button className="userlogout-btn" onClick={handleLogout}>
         Logout
       </button>
     </div>

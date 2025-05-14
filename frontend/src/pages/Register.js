@@ -35,13 +35,13 @@ function Register() {
   };
 
   return (
-    <div className="register-container">
-      <div className="register-card">
-        <h2 className="register-title">Create an Account</h2>
-        <p className="register-subtitle">Join us and start managing complaints easily</p>
-        {message && <p className="message">{message}</p>}
+    <div className="newregister-container">
+      <div className="newregister-card">
+        <h2 className="newregister-title">Create an Account</h2>
+        <p className="newregister-subtitle">Join us and start managing complaints easily</p>
+        {message && <p className="newmessage">{message}</p>}
         <form onSubmit={handleSubmit}>
-          <div className="input-group">
+          <div className="newinput-group">
             <label>Full Name</label>
             <input
               type="text"
@@ -52,7 +52,7 @@ function Register() {
               required
             />
           </div>
-          <div className="input-group">
+          <div className="newinput-group">
             <label>Email</label>
             <input
               type="email"
@@ -63,7 +63,7 @@ function Register() {
               required
             />
           </div>
-          <div className="input-group">
+          <div className="newinput-group">
             <label>Password</label>
             <input
               type="password"
@@ -74,7 +74,7 @@ function Register() {
               required
             />
           </div>
-          <div className="input-group">
+          <div className="newinput-group">
             <label>Confirm Password</label>
             <input
               type="password"
@@ -85,7 +85,7 @@ function Register() {
               required
             />
           </div>
-          <div className="input-group">
+          <div className="newinput-group">
             <label>Select Role</label>
             <select name="role" value={formData.role} onChange={handleChange} required>
               <option value="user">User</option>
@@ -93,10 +93,10 @@ function Register() {
               <option value="staff">Staff</option>
             </select>
           </div>
-          <button type="submit" className="register-btn">Sign Up</button>
+          <button type="submit" className="newregister-btn">Sign Up</button>
         </form>
         <p className="login-text">
-          Already have an account? <Link to="/login" className="login-link">Login</Link>
+          Already have an account? <Link to="/login" className="newlogin-link">Login</Link>
         </p>
       </div>
     </div>

@@ -34,10 +34,10 @@ const AddComplaint = () => {
   };
 
   return (
-    <div className="add-complaint-container">
-      <form onSubmit={handleSubmit} className="complaint-form">
+    <div className="useradd-complaint-container">
+      <form onSubmit={handleSubmit} className="usercomplaint-form">
         <h2>Submit a Complaint</h2>
-        <div className="input-group">
+        <div className="userinput-group">
           <label>Title</label>
           <input
             type="text"
@@ -46,7 +46,7 @@ const AddComplaint = () => {
             placeholder="Enter title"
           />
         </div>
-        <div className="input-group">
+        <div className="userinput-group">
           <label>Description</label>
           <textarea
             value={description}
@@ -54,11 +54,11 @@ const AddComplaint = () => {
             placeholder="Describe your issue"
           ></textarea>
         </div>
-        <button type="submit" className="submit-btn" disabled={loading}>
+        <button type="submit" className="usersubmit-btn" disabled={loading}>
           {loading ? "Submitting..." : "Submit Complaint"}
           
         </button>
-        <button className="back2-btn" onClick={() => navigate("/UserDashboard")}>Back</button>
+        <button className="userback2-btn" onClick={() => navigate("/UserDashboard")}>Back</button>
       </form>
       
       

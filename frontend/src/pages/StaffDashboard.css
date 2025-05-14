@@ -1,0 +1,153 @@
+/* Outer container */
+.staffdashboard1 {
+  padding: 2rem 1rem;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #fdfbfb);
+  min-height: 100vh;
+}
+
+/* Greeting (Welcome message) */
+.staffdashboard2 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2c3e50;
+  text-align: center;
+}
+
+/* Section title */
+.staffdashboard3 {
+  font-size: 1.4rem;
+  color: #34495e;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Loading or empty message */
+.staffdashboard4 {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  margin-top: 2rem;
+}
+
+/* Complaints list layout */
+.staffdashboard5 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 0 1rem;
+}
+
+/* Complaint card */
+.staffdashboard6 {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+  border-left: 5px solid #007bff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.staffdashboard6:hover {
+  transform: scale(1.02);
+}
+
+/* Complaint title */
+.staffdashboard7 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+/* Status badge */
+.staffdashboard8 {
+  margin: 0.75rem 0;
+  padding: 5px 12px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+/* Status color variants */
+.staffdashboard8.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.staffdashboard8.inprogress {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.staffdashboard8.resolved {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* Button wrapper */
+.staffdashboard9 {
+  text-align: right;
+  margin-top: 1rem;
+}
+
+/* Resolve button */
+.staffdashboard10 {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.staffdashboard10:hover {
+  background-color: #218838;
+}
+
+/* ======== RESPONSIVE STYLES ======== */
+@media screen and (max-width: 768px) {
+  .staffdashboard2 {
+    font-size: 1.6rem;
+  }
+
+  .staffdashboard3 {
+    font-size: 1.2rem;
+  }
+
+  .staffdashboard5 {
+    grid-template-columns: 1fr;
+    padding: 0;
+  }
+
+  .staffdashboard6 {
+    padding: 1.2rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .staffdashboard2 {
+    font-size: 1.4rem;
+  }
+
+  .staffdashboard3 {
+    font-size: 1rem;
+  }
+
+  .staffdashboard10 {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .staffdashboard9 {
+    text-align: center;
+  }
+}
