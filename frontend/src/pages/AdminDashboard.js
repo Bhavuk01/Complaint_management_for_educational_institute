@@ -7,7 +7,6 @@ const AdminDashboard = () => {
   const [staff, setStaff] = useState([]);
   const [selectedStaff, setSelectedStaff] = useState({});
   const [loading, setLoading] = useState(true);
-  const [complaintIdsMap, setComplaintIdsMap] = useState({});
 
   useEffect(() => {
     fetchComplaints();
@@ -23,13 +22,6 @@ const AdminDashboard = () => {
 
       const complaintsData = res.data;
 
-      // Generate and store a random ID for each complaint if not present
-      const idMap = {};
-      complaintsData.forEach((c) => {
-        idMap[c._id] = generateRandomAlphaNumeric();
-      });
-
-      setComplaintIdsMap(idMap);
       setComplaints(complaintsData);
       setLoading(false);
     } catch (error) {
@@ -67,21 +59,9 @@ const AdminDashboard = () => {
     }
   };
 
-  // Generate unique alphanumeric complaint ID like CMP-X3A421
-  const generateRandomAlphaNumeric = () => {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const numbers = '0123456789';
-    const getRandom = (chars, length) =>
-      Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
-
-    const randomLetters = getRandom(letters, 3);
-    const randomNumbers = getRandom(numbers, 3);
-
-    return `CMP-${randomLetters}${randomNumbers}`;
-  };
-
+  // Format the complaint ID (ensure it’s fixed once assigned)
   const formatComplaintId = (complaint) => {
-    return complaintIdsMap[complaint._id] || "CMP-XXXXXX";
+    return `CMP-${complaint._id.slice(0, 3).toUpperCase()}-${complaint._id.slice(3, 6)}`;
   };
 
   if (loading) return <div>Loading...</div>;

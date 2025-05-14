@@ -155,6 +155,26 @@ app.get("/admin/complaints", authMiddleware, async (req, res) => {
   }
 });
 
+// ✅ Update Complaint Status (Admin only)
+app.post("/admin/complaint/status", authMiddleware, async (req, res) => {
+  const { complaintId, status } = req.body;
+
+  try {
+    if (req.user.role !== "admin") return res.status(403).json({ message: "Access denied" });
+
+    const complaint = await Complaint.findById(complaintId);
+    if (!complaint) return res.status(404).json({ message: "Complaint not found" });
+
+    complaint.status = status;
+    await complaint.save();
+
+    res.json({ message: "Complaint status updated successfully", complaint });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating complaint status", error: error.message });
+  }
+});
+
+
 // ✅ Admin: Assign Complaint to Staff
 app.post("/admin/assign", authMiddleware, async (req, res) => {
   const { complaintId, staffId } = req.body;

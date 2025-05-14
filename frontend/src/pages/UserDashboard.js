@@ -42,6 +42,10 @@ function UserDashboard() {
     navigate("/login");
   };
 
+  const formatComplaintId = (complaint) => {
+  return `CMP-${complaint._id.slice(0, 3).toUpperCase()}-${complaint._id.slice(3, 6)}`;
+};
+
   return (
     <div className="dashboard-container">
       <h1 className="dashboard-title">Welcome, {user?.name || "User"}!</h1>
@@ -62,7 +66,7 @@ function UserDashboard() {
             {complaints.map((complaint) => (
               <div key={complaint._id} className="complaint-card">
                 <h3><strong>Title:</strong> {complaint.title}</h3>
-                <p><strong>Complaint ID:</strong> {complaint._id}</p>
+                <p><strong>Complaint ID:</strong> {formatComplaintId(complaint)}</p>
                 <p><strong>Description:</strong> {complaint.description}</p>
                 <span className={`status ${complaint.status.toLowerCase()}`}>
                   {complaint.status}
